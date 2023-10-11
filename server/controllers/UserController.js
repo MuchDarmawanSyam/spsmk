@@ -17,3 +17,34 @@ export const createUser = async(req, res) => {
         res.status(400).json({msg: error.message});
     }
 }
+
+export const getUsers = async(req, res) => {
+    try {
+        const response = await Users.findAll({
+            attributes: ['uuid', 'nama', 'email', 'role', 'fotoprofil']
+        });
+        res.status(200).json(response);
+    } catch (error) {
+        res.status(500).json({msg: error.message});
+    }
+}
+
+export const deleteUser = async(req, res) => {
+    const user = await Users.findOne({
+        where: {
+            uuid: req.params.id
+        }
+    });
+
+    if(!user) return res.status(404).json({msg: "User tidak ditemukan."});
+    try {
+        await Users.destroy({
+            where: {
+                id: user.id
+            }
+        });
+        res.status(200).json({msg: "Data user berhasil dihapus."});
+    } catch (error) {
+        res.status(400).json({msg: error.message});
+    }
+}
