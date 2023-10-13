@@ -19,7 +19,7 @@ You may also see any lint errors in the console.
 ### `server`
 
 Run `cd server` -> `npm install` or `npm i`.\
-Make .env file on root server directory, add APP_PORT for dafault server port and SESS_SECRET for session key
+Make .env file on root server directory, add APP_PORT for default server port and SESS_SECRET for session key
 Run server `node index.js` or `nodemon index` if using nodemon.\
 
 ### `Database`
