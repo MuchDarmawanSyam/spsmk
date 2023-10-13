@@ -29,4 +29,4 @@ Configure database settings on `server/config/database.js`.\
 
 ## About
 
-This app was developed by [Much Darmawan Iriansyah Syam](muchdarmawansyam.github.io/).
+This app was developed by [Much Darmawan Iriansyah Syam](https://muchdarmawansyam.github.io/).
