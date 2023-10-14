@@ -1,9 +1,11 @@
 import express from "express";
-//import cors from "cors";
+import fileUpload from "express-fileupload";
+import cors from "cors";
 import session from "express-session";
 import dotenv from "dotenv";
 import db from "./config/database.js";
 import SequelizeStore from "connect-session-sequelize";
+
 import UserRoute from "./routes/UserRoutes.js";
 import AuthRoute from "./routes/AuthRoute.js";
 dotenv.config();
@@ -15,7 +17,7 @@ const store = new sessionStore({
     db:db
 });
 
-// Matikan setelah sinkron pertama kali
+// Matikan setelah sinkron pertama kali.
 // (async() => {
 //     await db.sync();
 // })();
@@ -30,11 +32,11 @@ app.use(session({
     }
 }))
 
-// app.use(cors({
-//     credentials: true,
-//     origin: "http://localhost:3000"
-// }));
+app.use(cors());
 app.use(express.json());
+app.use(fileUpload());
+app.use(express.static("public"));
+
 app.use(UserRoute);
 app.use(AuthRoute);
 

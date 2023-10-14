@@ -48,6 +48,13 @@ const Users = db.define('users', {
         validate: {
             notEmpty: true
         }
+    },
+    url: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+            notEmpty: true
+        }
     }
     
 }, {
