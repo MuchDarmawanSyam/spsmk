@@ -7,6 +7,7 @@ import db from "./config/database.js";
 import SequelizeStore from "connect-session-sequelize";
 
 import UserRoute from "./routes/UserRoutes.js";
+import SuratMasukRoute from "./routes/SuratMasukRoute.js";
 import AuthRoute from "./routes/AuthRoute.js";
 dotenv.config();
 
@@ -18,9 +19,9 @@ const store = new sessionStore({
 });
 
 // Matikan setelah sinkron pertama kali.
-// (async() => {
-//     await db.sync();
-// })();
+(async() => {
+    await db.sync();
+})();
 
 app.use(session({
     secret: process.env.SESS_SECRET,
@@ -39,6 +40,7 @@ app.use(express.static("public"));
 
 app.use(UserRoute);
 app.use(AuthRoute);
+app.use(SuratMasukRoute);
 
 // store.sync(); // Matikan setelah membuat tabel session di database
 

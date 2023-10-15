@@ -1,9 +1,10 @@
 import { Sequelize } from "sequelize";
 import db from "../config/database.js";
+import Users from "./UserModel.js";
 
-const {DataTypes} = Sequelize;
+const { DataTypes } = Sequelize;
 
-const Users = db.define('users', {
+const SuratMasuk = db.define('surat_masuk', {
     uuid: {
         type: DataTypes.STRING,
         defaultValue: DataTypes.UUIDV4,
@@ -12,53 +13,57 @@ const Users = db.define('users', {
             notEmpty: true
         }
     },
-    nama: {
+    kodeSurat: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
             notEmpty: true,
-            len: [3, 50]
+            len: [12, 13]
         }
     },
-    email: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-            notEmpty: true,
-            isEmail: true
-        }
-    },
-    password: {
+    perihal: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
             notEmpty: true
         }
     },
-    role: { // Tipe datanya akan diubah ke enum
+    isi: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
             notEmpty: true
         }
     },
-    fotoprofil: {
+    asal: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
             notEmpty: true
         }
     },
-    url: {
-        type: DataTypes.STRING,
+    tglSurat: {
+        type: DataTypes.DATEONLY,
+        allowNull: false,
+        validate: {
+            notEmpty: true
+        }
+    },
+    tebusan: {
+        type: DataTypes.STRING
+    },
+    userId: {
+        type: DataTypes.INTEGER,
         allowNull: false,
         validate: {
             notEmpty: true
         }
     }
-    
 }, {
     freezeTableName: true
 });
 
-export default Users;
+Users.hasMany(SuratMasuk);
+SuratMasuk.belongsTo(Users, {foreignKey: "userId"});
+
+export default SuratMasuk;
