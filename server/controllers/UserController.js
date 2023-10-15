@@ -1,6 +1,5 @@
 import Users from "../models/UserModel.js";
 import argon2 from "argon2";
-import path from "path";
 import fs from "fs";
 
 export const createUser = async(req, res) => {
@@ -80,7 +79,6 @@ export const updateUsers = async(req, res) => {
 }
 
 
-// tambah hapus gambar jika bukan default.jpg
 export const deleteUser = async(req, res) => {
     const user = await Users.findOne({
         where: {
@@ -89,6 +87,9 @@ export const deleteUser = async(req, res) => {
     });
 
     if(!user) return res.status(404).json({msg: "User tidak ditemukan."});
+    if(user.fotoprofil != "Default.jpg"){
+        fs.unlinkSync(`./public/profiles/${user.fotoprofil}`);
+    }
     try {
         await Users.destroy({
             where: {
