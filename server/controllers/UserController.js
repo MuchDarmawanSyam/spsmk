@@ -66,7 +66,7 @@ export const updateUsers = async(req, res) => {
     if(admin == 1 && role == "petugas") return res.status(403).json({msg: "Role admin tidak boleh kosong."});
     try {
         await Users.update({
-            role: role,
+            role: role
         }, {
             where: {
                 id: user.id
@@ -78,6 +78,34 @@ export const updateUsers = async(req, res) => {
     }
 }
 
+export const resetPassUser = async(req, res) => {
+    const user = await Users.findOne({
+        where: {
+            uuid: req.params.id
+        }
+    });
+
+    if(!user) return res.status(404).json({msg: "User tidak ditemukan."});
+    let newPassword;
+    if(user.role == "admin"){
+        newPassword = await argon2.hash("admin123");
+    }else{
+        newPassword = await argon2.hash("petugas123");
+    }
+
+    try {
+        await Users.update({
+            password: newPassword
+        }, {
+            where: {
+                id: user.id
+            }
+        });
+        res.status(200).json({msg: "Password user berhasil direset."});
+    } catch (error) {
+        res.status(400).json({msg: error.message});
+    }
+}
 
 export const deleteUser = async(req, res) => {
     const user = await Users.findOne({
