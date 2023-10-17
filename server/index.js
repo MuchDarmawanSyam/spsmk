@@ -19,9 +19,7 @@ const store = new sessionStore({
 });
 
 // Matikan setelah sinkron pertama kali.
-(async() => {
-    await db.sync();
-})();
+//(async() => {await db.sync()})();
 
 app.use(session({
     secret: process.env.SESS_SECRET,

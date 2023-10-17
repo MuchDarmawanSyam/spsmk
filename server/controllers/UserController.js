@@ -5,6 +5,13 @@ import fs from "fs";
 export const createUser = async(req, res) => {
     const {nama, email, password, cPassword, role} = req.body;
     if (password !== cPassword) return res.status(400).json({msg: "Password dan Confirm Password tidak cocok."});
+    const user = await Users.findOne({
+        attributes: ['email'],
+        where: {
+            email: email
+        }
+    });
+    if(user) return res.status(409).json({msg: "Email "+email+" sudah digunakan akun lain."})
     const hashPassword = await argon2.hash(password);
     const url = `${req.protocol}://${req.get("host")}/profiles/Default.jpg`;
     if(role !== "admin" && role !== "petugas") return res.status(403).json({msg: "Role tidak sesuai."});
