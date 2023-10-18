@@ -8,6 +8,7 @@ import SequelizeStore from "connect-session-sequelize";
 
 import UserRoute from "./routes/UserRoutes.js";
 import SuratMasukRoute from "./routes/SuratMasukRoute.js";
+import SuratKeluarRoute from "./routes/SuratKeluarRoute.js";
 import AuthRoute from "./routes/AuthRoute.js";
 dotenv.config();
 
@@ -29,7 +30,7 @@ app.use(session({
     cookie: {
         secure: 'auto',   // http = false, https = true
     }
-}))
+}));
 
 app.use(cors());
 app.use(express.json());
@@ -39,6 +40,7 @@ app.use(express.static("public"));
 app.use(UserRoute);
 app.use(AuthRoute);
 app.use(SuratMasukRoute);
+app.use(SuratKeluarRoute);
 
 // store.sync(); // Matikan setelah membuat tabel session di database
 
