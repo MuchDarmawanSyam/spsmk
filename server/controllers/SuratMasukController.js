@@ -1,8 +1,10 @@
 import SuratMasuk from "../models/SuratMasukModel.js";
 import Users from "../models/UserModel.js";
-// buat validasi di create dan update kalo kodesurat tidak boleh sama
+
 export const createSurat = async(req, res) => {
     const {kodeSurat, perihalSurat, isiSurat, asalSurat, tglSurat, tebusanSurat} = req.body;
+    const surat = await SuratMasuk.findOne({attributes: ['kodeSurat'], where: {kodeSurat: kodeSurat}});
+    if(surat) return res.status(409).json({msg: "Kode surat masuk '"+kodeSurat+"' sudah dipakai."});
     try {
         await SuratMasuk.create({
             kodeSurat: kodeSurat,
@@ -67,6 +69,8 @@ export const updateSurat = async(req, res) => {
         });
         if(!surat) return res.status(404).json({msg: "Data surat masuk tidak ditemukan."});
         const {kodeSurat, perihalSurat, isiSurat, asalSurat, tglSurat, tebusanSurat} = req.body;
+        const suratkode = await SuratMasuk.findOne({attributes: ['kodeSurat'], where: {kodeSurat: kodeSurat}});
+        if(suratkode && suratkode.kodeSurat != surat.kodeSurat) return res.status(409).json({msg: "Kode surat masuk '"+kodeSurat+"' sudah dipakai."});
         await SuratMasuk.update({
             kodeSurat: kodeSurat,
             perihal: perihalSurat,

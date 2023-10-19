@@ -7,15 +7,15 @@ import {
     resetPassUser,
     deleteUser
 } from "../controllers/UserController.js";
-// middleware
+import { adminOnly, verify } from "../middleware/UserMiddleware.js";
 
 const router = express.Router();
 
-router.post('/users', createUser);
-router.get('/users', getUsers);
-router.get('/users/:id', getUsersById);
-router.patch('/users/:id', updateUsers);
-router.patch('/users/reset/:id', resetPassUser);
-router.delete('/users/:id', deleteUser);
+router.post('/users', verify, adminOnly, createUser);
+router.get('/users', verify, adminOnly, getUsers);
+router.get('/users/:id', verify, adminOnly, getUsersById);
+router.patch('/users/:id', verify, adminOnly, updateUsers);
+router.patch('/users/reset/:id', verify, adminOnly, resetPassUser);
+router.delete('/users/:id', verify, adminOnly, deleteUser);
 
 export default router;
