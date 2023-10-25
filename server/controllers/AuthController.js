@@ -84,7 +84,7 @@ export const updateMe = async(req, res) => {
             fs.unlinkSync(filepath);
 
             file.mv(`./public/profiles/${fileName}`, (err) => {
-                if(err) return res.status(500).json({msd: err.message});
+                if(err) return res.status(500).json({msg: err.message});
             });
         }
     }

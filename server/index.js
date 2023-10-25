@@ -10,6 +10,9 @@ import UserRoute from "./routes/UserRoutes.js";
 import SuratMasukRoute from "./routes/SuratMasukRoute.js";
 import SuratKeluarRoute from "./routes/SuratKeluarRoute.js";
 import AuthRoute from "./routes/AuthRoute.js";
+import LampiranMasukRoute from "./routes/LampiranMasukRoute.js";
+import LampiranKeluarRoute from "./routes/LampiranKeluarRoute.js";
+//import LampiranKeluar from "./models/LampiranKeluarModel.js";
 dotenv.config();
 
 const app = express();
@@ -19,8 +22,7 @@ const store = new sessionStore({
     db:db
 });
 
-// Matikan setelah sinkron pertama kali.
-//(async() => {await db.sync()})();
+//(async() => {await LampiranKeluar.sync()})();
 
 app.use(session({
     secret: process.env.SESS_SECRET,
@@ -41,6 +43,8 @@ app.use(UserRoute);
 app.use(AuthRoute);
 app.use(SuratMasukRoute);
 app.use(SuratKeluarRoute);
+app.use(LampiranMasukRoute);
+app.use(LampiranKeluarRoute);
 
 // store.sync(); // Matikan setelah membuat tabel session di database
 
