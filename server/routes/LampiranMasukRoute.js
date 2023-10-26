@@ -10,8 +10,8 @@ import { verify } from "../middleware/UserMiddleware.js";
 
 const router = express.Router();
 
-router.post('/surat/masuk/lampiran/:id', verify, createAttachment);
 router.get('/surat/masuk/lampiran', verify, getAllAttachment);
+router.post('/surat/masuk/lampiran/:id', verify, createAttachment);
 router.patch('/surat/masuk/lampiran/:id', verify, updateAttachment);
 router.delete('/surat/masuk/lampiran/:id', verify, deleteAttachment);
 

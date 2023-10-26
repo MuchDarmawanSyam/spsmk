@@ -41,10 +41,10 @@ app.use(express.static("public"));
 
 app.use(UserRoute);
 app.use(AuthRoute);
+app.use(LampiranKeluarRoute);
+app.use(LampiranMasukRoute);
 app.use(SuratMasukRoute);
 app.use(SuratKeluarRoute);
-app.use(LampiranMasukRoute);
-app.use(LampiranKeluarRoute);
 
 // store.sync(); // Matikan setelah membuat tabel session di database
 
