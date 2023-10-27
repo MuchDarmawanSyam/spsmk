@@ -1,5 +1,7 @@
 import SuratKeluar from "../models/SuratKeluarModel.js";
+import LampiranKeluar from "../models/LampiranKeluarModel.js";
 import Users from "../models/UserModel.js";
+import { unlinkSync } from "fs";
 
 export const createSurat = async(req, res) => {
     const {kodeSurat, perihalSurat, isiSurat, tujuanSurat, tglSurat, tebusanSurat} = req.body;
@@ -97,6 +99,17 @@ export const deleteSurat = async(req, res) => {
             }
         });
         if(!surat) return res.status(404).json({msg: "Data surat keluar tidak ditemukan."});
+        const attachment = await LampiranKeluar.findAll({
+            attributes: ['namaLampiran'],
+            where: {
+                suratKeluarId: surat.id
+            }
+        });
+        if(attachment) {
+            attachment.forEach((attachmentName) => {
+                unlinkSync(`./public/attachments/outgoing/${attachmentName.namaLampiran}`);
+            });
+        }
         await SuratKeluar.destroy({
             where: {
                 id: surat.id

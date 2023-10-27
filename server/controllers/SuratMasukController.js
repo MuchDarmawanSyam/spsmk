@@ -1,5 +1,7 @@
 import SuratMasuk from "../models/SuratMasukModel.js";
+import LampiranMasuk from "../models/LampiranMasukModel.js"
 import Users from "../models/UserModel.js";
+import { unlinkSync } from "fs";
 
 export const createSurat = async(req, res) => {
     const {kodeSurat, perihalSurat, isiSurat, asalSurat, tglSurat, tebusanSurat} = req.body;
@@ -97,6 +99,17 @@ export const deleteSurat = async(req, res) => {
             }
         });
         if(!surat) return res.status(404).json({msg: "Data surat masuk tidak ditemukan."});
+        const attachment = await LampiranMasuk.findAll({
+            attributes: ['namaLampiran'],
+            where: {
+                suratMasukId: surat.id
+            }
+        });
+        if(attachment) {
+            attachment.forEach((attachmentName) => {
+                unlinkSync(`./public/attachments/incoming/${attachmentName.namaLampiran}`);
+            });
+        }
         await SuratMasuk.destroy({
             where: {
                 id: surat.id

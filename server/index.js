@@ -12,7 +12,6 @@ import SuratKeluarRoute from "./routes/SuratKeluarRoute.js";
 import AuthRoute from "./routes/AuthRoute.js";
 import LampiranMasukRoute from "./routes/LampiranMasukRoute.js";
 import LampiranKeluarRoute from "./routes/LampiranKeluarRoute.js";
-//import LampiranKeluar from "./models/LampiranKeluarModel.js";
 dotenv.config();
 
 const app = express();
@@ -30,7 +29,7 @@ app.use(session({
     saveUninitialize: true,
     store: store,
     cookie: {
-        secure: 'auto',   // http = false, https = true
+        secure: 'auto',
     }
 }));
 
