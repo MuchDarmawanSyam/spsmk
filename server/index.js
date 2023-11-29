@@ -21,6 +21,7 @@ const store = new sessionStore({
     db:db
 });
 
+// Bikin created and edited by
 //(async() => {await LampiranKeluar.sync()})();
 
 app.use(session({
