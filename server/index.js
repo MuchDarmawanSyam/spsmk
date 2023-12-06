@@ -34,7 +34,10 @@ app.use(session({
     }
 }));
 
-app.use(cors());
+app.use(cors({
+    credentials: true, // Frontend dapat mengirimkan kredentials
+    origin: "http://127.0.0.1:5173" // hanya endpoint ini yang dapat mengakses api backend
+}));
 app.use(express.json());
 app.use(fileUpload());
 app.use(express.static("public"));

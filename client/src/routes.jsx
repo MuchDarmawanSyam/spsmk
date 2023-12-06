@@ -4,10 +4,9 @@ import {
   TableCellsIcon,
   InformationCircleIcon,
   ServerStackIcon,
-  RectangleStackIcon,
 } from "@heroicons/react/24/solid";
-import { Home, Profile, Tables, Notifications } from "@/pages/dashboard";
-import { SignIn, SignUp } from "@/pages/auth";
+import { Home, User, Lampiran, Laporan, Surat} from "@/pages/dashboard";
+import { Login } from "@/pages/auth";
 
 const icon = {
   className: "w-5 h-5 text-inherit",
@@ -25,39 +24,39 @@ export const routes = [
       },
       {
         icon: <UserCircleIcon {...icon} />,
-        name: "profile",
-        path: "/profile",
-        element: <Profile />,
+        name: "kelola surat",
+        path: "/surat",
+        element: <Surat />,
       },
       {
         icon: <TableCellsIcon {...icon} />,
-        name: "tables",
-        path: "/tables",
-        element: <Tables />,
+        name: "kelola lampiran",
+        path: "/lampiran",
+        element: <Lampiran />,
       },
       {
         icon: <InformationCircleIcon {...icon} />,
-        name: "notifications",
-        path: "/notifications",
-        element: <Notifications />,
+        name: "kelola user",
+        path: "/user",
+        element: <User />,
+      },
+      {
+        icon: <InformationCircleIcon {...icon} />,
+        name: "kelola laporan",
+        path: "/laporan",
+        element: <Laporan />,
       },
     ],
   },
   {
-    title: "auth pages",
+    title: "Login Pages",
     layout: "auth",
     pages: [
       {
         icon: <ServerStackIcon {...icon} />,
-        name: "sign in",
-        path: "/sign-in",
-        element: <SignIn />,
-      },
-      {
-        icon: <RectangleStackIcon {...icon} />,
-        name: "sign up",
-        path: "/sign-up",
-        element: <SignUp />,
+        name: "login",
+        path: "/login",
+        element: <Login />,
       },
     ],
   },
