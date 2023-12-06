@@ -19,6 +19,8 @@ import axios from "axios";
 export function Surat() {
   const [surat, setSurat] = useState([]);
   const [suratDitampilkan, setSuratDitampilkan] = useState("masuk");
+  const [searchQueries, setSearchQueries] = useState("");
+  const [searchParams] = useState(["kodeSurat", "perihal", "tebusan", "tglSurat"]);
 
   useEffect(() => {
     if (suratDitampilkan == "masuk") {
@@ -26,12 +28,25 @@ export function Surat() {
     }else{
       getSurat("http://localhost:5000/surat/keluar");
     }
-  }, [suratDitampilkan]);
+  }, [suratDitampilkan, searchQueries]);
 
   const getSurat = async(endpoint) => {
     const response = await axios.get(endpoint);
-    setSurat(response.data);
+    setSurat(search(response.data));
   }
+
+  const search = (items) => {
+    return items.filter((item) => {
+        return searchParams.some((newItem) => {
+            return (
+                item[newItem]
+                    .toString()
+                    .toLowerCase()
+                    .indexOf(searchQueries.toLowerCase()) > -1
+            );
+        });
+    });
+}
 
   const kapitalHurufPertama = (str) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
@@ -39,21 +54,19 @@ export function Surat() {
 
   return (
     <div className="mt-12 mb-8 flex flex-col gap-12">
-      {
-      }
       <div className="w-auto flex justify-end">
         <Tabs value={suratDitampilkan} className="w-1/3">
           <TabsHeader>
             <Tab value="masuk"
               onClick={() => setSuratDitampilkan("masuk")}
             >
-              <EnvelopeOpenIcon className="-mt-1 mr-2 inline-block h-5 w-5" />
+              <EnvelopeIcon className="-mt-1 mr-2 inline-block h-5 w-5" />
                 Masuk
             </Tab>
             <Tab value="keluar"
               onClick={() => setSuratDitampilkan("keluar")}
             >
-              <EnvelopeIcon className="-mt-0.5 mr-2 inline-block h-5 w-5" />
+              <EnvelopeOpenIcon className="-mt-0.5 mr-2 inline-block h-5 w-5" />
                 Keluar
             </Tab>
           </TabsHeader>
@@ -67,7 +80,9 @@ export function Surat() {
             </Typography>
             <div className="w-1/3 flex justify-end">
               <div className="mr-auto md:mr-4 md:w-56">
-                <Input label={"Pencarian Surat " + kapitalHurufPertama(suratDitampilkan)} color="white" />
+                <Input label={"Pencarian Surat " + kapitalHurufPertama(suratDitampilkan)} color="white" 
+                  onChange={(e) => setSearchQueries(e.target.value)}
+                />
               </div>
             </div>
           </div>
