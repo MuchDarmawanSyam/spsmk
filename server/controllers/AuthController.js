@@ -19,7 +19,8 @@ export const login = async(req, res) => {
     const nama = user.nama;
     const email = user.email;
     const role = user.role;
-    res.status(200).json({uuid, nama, email, role});
+    const fotoSaya = user.url;
+    res.status(200).json({uuid, nama, email, role, fotoSaya});
 }
 
 export const getMe = async(req, res) => {

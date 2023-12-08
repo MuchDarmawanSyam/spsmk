@@ -10,10 +10,36 @@ import {
     Checkbox,
     Button
   } from "@material-tailwind/react";
+import { LoginUser, reset } from "@/context/authSlice";
 
 export const Login = () => {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { user, isError, isSuccess, isLoading, message } = useSelector(
+    (state) => state.auth
+  );
+
+  useEffect(() => {
+    if(user || isSuccess){
+      navigate("/dashboard/home");
+    }
+    dispatch(reset());
+  }, [user, isSuccess, dispatch, navigate]);
+
+  const Auth = (e) => {
+    e.preventDefault();
+    dispatch(LoginUser({email, password}));
+  }
+
+  const resetForm = (e) => {
+    setEmail("");
+    setPassword("");
+  }
 
   return (
     <div>
@@ -34,7 +60,9 @@ export const Login = () => {
           </div>
           <hr className=" border-black mr-4 ml-4" />
           <CardBody className="flex flex-col gap-4">
-            <Input label="Email" size="lg" />
+            <Input label="Email" size="lg" value={email} onChange={
+              (e) => setEmail(e.target.value)
+            } />
             <Input label="Password" size="lg" type={showPassword ? "text" : "password"} value={password} onChange={(e) =>  setPassword(e.target.value)}/>
             <div className="flex justify-end">
               <Checkbox color="indigo" label="Show Password" onChange={() => setShowPassword((prev) => !prev)}/>
@@ -42,12 +70,12 @@ export const Login = () => {
           </CardBody>
           <CardFooter className="pt-0 grid grid-cols-2 place-items-center">
             <div>
-              <Button variant="gradient">
+              <Button variant="gradient" onClick={resetForm} disabled={(email == "" || password == "") ? true : false}>
                 Reset
               </Button>
             </div>
             <div>
-              <Button variant="gradient">
+              <Button variant="gradient" onClick={Auth} disabled={(email == "" || password == "") ? true : false}>
                 Login
               </Button>
             </div>

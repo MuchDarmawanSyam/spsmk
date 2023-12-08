@@ -49,14 +49,14 @@ export const routes = [
     ],
   },
   {
-    title: "Login Pages",
     layout: "auth",
     pages: [
       {
-        icon: <ServerStackIcon {...icon} />,
-        name: "login",
         path: "/login",
         element: <Login />,
+      },
+      {
+        path: "/logout",
       },
     ],
   },

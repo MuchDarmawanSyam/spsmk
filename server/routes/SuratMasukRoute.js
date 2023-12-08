@@ -12,7 +12,7 @@ import {
 
 const router = express.Router();
 
-router.get('/surat/masuk', getSurat);// kembalikan verify
+router.get('/surat/masuk', verify, getSurat);
 router.post('/surat/masuk', verify, createSurat);
 router.get('/surat/masuk/:id', verify, getSuratById);
 router.patch('/surat/masuk/:id', verify, updateSurat);
