@@ -3,10 +3,8 @@ import {
   UserCircleIcon,
   TableCellsIcon,
   InformationCircleIcon,
-  ServerStackIcon,
 } from "@heroicons/react/24/solid";
 import { Home, User, Lampiran, Laporan, Surat} from "@/pages/dashboard";
-import { Login } from "@/pages/auth";
 
 const icon = {
   className: "w-5 h-5 text-inherit",
@@ -45,18 +43,6 @@ export const routes = [
         name: "kelola laporan",
         path: "/laporan",
         element: <Laporan />,
-      },
-    ],
-  },
-  {
-    layout: "auth",
-    pages: [
-      {
-        path: "/login",
-        element: <Login />,
-      },
-      {
-        path: "/logout",
       },
     ],
   },
