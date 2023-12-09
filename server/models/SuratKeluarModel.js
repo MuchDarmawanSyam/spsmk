@@ -28,13 +28,6 @@ const SuratKeluar = db.define('surat_keluar', {
             notEmpty: true
         }
     },
-    isi: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-            notEmpty: true
-        }
-    },
     tujuan: {
         type: DataTypes.STRING,
         allowNull: false,

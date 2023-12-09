@@ -28,13 +28,6 @@ const SuratMasuk = db.define('surat_masuk', {
             notEmpty: true
         }
     },
-    isi: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-            notEmpty: true
-        }
-    },
     asal: {
         type: DataTypes.STRING,
         allowNull: false,
