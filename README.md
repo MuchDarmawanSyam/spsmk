@@ -11,7 +11,7 @@ In the project directory:
 
 Run `cd client` -> `npm install` or `npm i`.\
 Run app `npm run dev`.\
-Open [http://127.0.0.1:5173/](http://127.0.0.1:5173/) to view it in your browser.
+Open [http://127.0.0.1:5173/](http://127.0.0.1:5173/) or the URL that appear on terminal to view it in your browser.
 
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
