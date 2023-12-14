@@ -7,7 +7,8 @@ import {
   Configurator,
   Footer,
 } from "@/widgets/layout";
-import routes from "@/routes";
+import routes from "@/routes"; // Main Page
+import { FormTambah } from "@/components/surat-form-add";
 import { useMaterialTailwindController, setOpenConfigurator } from "@/context";
 
 export function Dashboard() {
@@ -42,6 +43,7 @@ export function Dashboard() {
                 <Route exact path={path} element={element} />
               ))
           )}
+           <Route exact path="/surat/tambah" element={<FormTambah />} />
         </Routes>
         <div className="text-blue-gray-600">
           <Footer />

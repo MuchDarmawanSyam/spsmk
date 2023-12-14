@@ -18,7 +18,7 @@ const SuratKeluar = db.define('surat_keluar', {
         allowNull: false,
         validate: {
             notEmpty: true,
-            len: [12, 13]
+            len: [12, 20]
         }
     },
     perihal: {

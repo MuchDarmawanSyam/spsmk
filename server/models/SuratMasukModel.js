@@ -18,7 +18,7 @@ const SuratMasuk = db.define('surat_masuk', {
         allowNull: false,
         validate: {
             notEmpty: true,
-            len: [12, 13]
+            len: [12, 20]
         }
     },
     perihal: {

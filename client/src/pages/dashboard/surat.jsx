@@ -7,29 +7,39 @@ import {
   TabsHeader,
   Tab,
   Input,
+  IconButton,
   Button,
 } from "@material-tailwind/react";
 import {
   EnvelopeOpenIcon,
-  EnvelopeIcon
+  EnvelopeIcon,
+  PlusCircleIcon
 } from "@heroicons/react/24/solid";
 import { useState, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import LoadingData from "@/widgets/layout/loading-data";
 import axios from "axios";
 
 export function Surat() {
   const [loading, setLoading] = useState(false);
   const [surat, setSurat] = useState([]);
-  const [suratDitampilkan, setSuratDitampilkan] = useState("masuk");
+  const [suratDitampilkan, setSuratDitampilkan] = useState("");
   const [searchQueries, setSearchQueries] = useState("");
   const [searchParams] = useState(["kodeSurat", "perihal", "tebusan", "tglSurat"]);
+  const { state } = useLocation();
+  const navigate = useNavigate();
+  
+  // Membaca jenis form asal agar menampilkan surat sejenis
+  useEffect(() => {
+    if (state) {
+      setSuratDitampilkan(state.jenisSurat);
+    }else{
+      navigate("/dashboard/home");
+    }
+  }, []);
 
   useEffect(() => {
-    if (suratDitampilkan == "masuk") {
-      getSurat("http://localhost:5000/surat/masuk");
-    }else{
-      getSurat("http://localhost:5000/surat/keluar");
-    }
+      getSurat("http://localhost:5000/surat/"+suratDitampilkan);
   }, [suratDitampilkan, searchQueries]);
 
   const getSurat = async(endpoint) => {
@@ -51,7 +61,7 @@ export function Surat() {
         });
     });
 }
-
+  
   const kapitalHurufPertama = (str) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
@@ -59,7 +69,7 @@ export function Surat() {
   return (
     <div className="mt-12 mb-8 flex flex-col gap-12">
       <div className="w-auto flex justify-end">
-        <Tabs value={suratDitampilkan} className="w-1/3">
+        <Tabs value={(state != null) ? state.jenisSurat : suratDitampilkan} className="w-1/3">
           <TabsHeader>
             <Tab value="masuk"
               onClick={() => setSuratDitampilkan("masuk")}
@@ -80,13 +90,21 @@ export function Surat() {
         <CardHeader variant="gradient" color="gray" className="mb-8 p-6">
           <div className="flex">
             <Typography variant="h6" color="white" className="w-2/3 mt-2">
-                  Lihat Data Surat {kapitalHurufPertama(suratDitampilkan)}
+                  Lihat Data Surat {kapitalHurufPertama(suratDitampilkan)} 
+                  {/* {state.jenisForm}  */}
             </Typography>
             <div className="w-1/3 flex justify-end">
-              <div className="mr-auto md:mr-4 md:w-56">
-                <Input label={"Pencarian Surat " + kapitalHurufPertama(suratDitampilkan)} color="white" 
+              <div className="mr-auto md:mr-4 md:w-56 ml-10">
+                <Input label={"Pencarian Surat " + kapitalHurufPertama('masuk')} color="white" 
                   onChange={(e) => setSearchQueries(e.target.value)}
                 />
+              </div>
+              <div className="mr-auto md:mr-4 md:w-56">
+                <Link to="/dashboard/surat/tambah" state={{ jenisSurat: suratDitampilkan }}>
+                  <IconButton ripple={true} className="rounded-full text-green-800" color="white" >
+                    <PlusCircleIcon className="w-10 h-10"/>
+                  </IconButton>
+                </Link>
               </div>
             </div>
           </div>
