@@ -6,7 +6,7 @@ import { unlinkSync } from "fs";
 export const createSurat = async(req, res) => {
     const {kodeSurat, perihalSurat, tujuanSurat, tglSurat, tebusanSurat} = req.body;
     const surat = await SuratKeluar.findOne({attributes: ['kodeSurat'], where: {kodeSurat: kodeSurat}});
-    if(surat) return res.status(409).json({msg: "Kode surat keluar '"+kodeSurat+"' sudah dipakai."});
+    if(surat) return res.status(409).json({msg: "Nomor surat keluar '"+kodeSurat+"' sudah dipakai."});
     try {
         await SuratKeluar.create({
             kodeSurat: kodeSurat,

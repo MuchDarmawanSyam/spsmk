@@ -7,6 +7,7 @@ import {
     TabsHeader,
     Tab,
     Input,
+    Alert,
     IconButton
   } from "@material-tailwind/react";
   import {
@@ -26,7 +27,8 @@ import {
     const [loading, setLoading] = useState(false);
     const [suratDitampilkan, setSuratDitampilkan] = useState(""); // Nilai Default masuk, diset di layout navigation
     const [fromTable, setFromTable] = useState(true);
-    const [msg, setMsg] = useState("");
+    const [alertMsg, setAlertMsg] = useState(false);
+    const [errorMsg, setErrorMsg] = useState("");
     const navigate = useNavigate();
     const { state } = useLocation();
 
@@ -45,7 +47,7 @@ import {
         setSuratDitampilkan(state.jenisSurat);
         setFromTable(false);
       } else {
-        navigate("/dashboard/surat");
+        navigate("/dashboard/home");
       }
     }, []);
   
@@ -65,7 +67,8 @@ import {
         });
       } catch (error) {
         setLoading(false);
-        setMsg(error.response.data.msg);
+        setAlertMsg(true);
+        setErrorMsg(error.response.data.msg);
       }
     }
     
@@ -85,14 +88,25 @@ import {
         });
       } catch (error) {
         setLoading(false);
-        setMsg(error.response.data.msg);
+        setAlertMsg(true);
+        setErrorMsg(error.response.data.msg);
       }
     }
 
     const kapitalHurufPertama = (str) => {
       return str.charAt(0).toUpperCase() + str.slice(1);
     }
-  
+
+    const resetForm = () => {
+      setNomorSurat("");
+      setTujuan("");
+      setAsal("");
+      setPerihal("");
+      setTebusan("");
+      setTglSurat("");
+      setTglDiterima("");
+    }
+
     return (
       <div className="mt-12 mb-8 flex flex-col gap-12">
         <div className="w-auto flex justify-end">
@@ -121,14 +135,29 @@ import {
               </Typography>
               <div className="w-1/3 flex justify-end">
                 <div className="md:mr-4 md:w-56 ml-24">
-                  <IconButton ripple={true} className="rounded-full text-orange-900" color="white" >
+                  <IconButton ripple={true} className="rounded-full text-orange-900" color="white" onClick={() => resetForm()} >
                     <StopCircleIcon className="w-10 h-10"/>
                   </IconButton>
                 </div>
                 <div className="md:mr-4 md:w-56">
                   <IconButton ripple={true} className="rounded-full text-green-800" color="white" 
                     onClick={() => (suratDitampilkan == "masuk") ? addSuratMasuk() : addSuratKeluar()}
-                  >
+                  disabled={
+                    // Validasi Form, tdk boleh salah satu kosong
+                    (suratDitampilkan == "masuk") ?
+                    ((nomorSurat == "") ||
+                     (asal == "") ||
+                     (perihal == "") ||
+                     (tebusan == "") ||
+                     (tglSurat == "")
+                    ) :
+                    ((nomorSurat == "") ||
+                     (tujuan == "") ||
+                     (perihal == "") ||
+                     (tebusan == "") ||
+                     (tglSurat == "")
+                    )
+                  }>
                     <CheckCircleIcon className="w-10 h-10"/>
                   </IconButton>
                 </div>
@@ -147,6 +176,11 @@ import {
             </div>
           </CardHeader>
           <CardBody className="overflow-x-scroll px-0 pt-0 pb-2">
+            { alertMsg ? 
+                <Alert open={alertMsg} onClose={() => setAlertMsg(false)} className="w-2/3 mb-8 xl:ml-40 md:ml-36 sm:ml-24">
+                  {errorMsg}
+                </Alert> : "" }
+
             { loading ? <LoadingData /> : (suratDitampilkan == "masuk") ? 
             
             // Form Tambah Surat Masuk

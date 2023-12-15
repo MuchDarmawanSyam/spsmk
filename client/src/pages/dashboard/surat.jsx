@@ -95,7 +95,7 @@ export function Surat() {
             </Typography>
             <div className="w-1/3 flex justify-end">
               <div className="mr-auto md:mr-4 md:w-56 ml-10">
-                <Input label={"Pencarian Surat " + kapitalHurufPertama('masuk')} color="white" 
+                <Input label={"Pencarian Surat " + kapitalHurufPertama(suratDitampilkan)} color="white" 
                   onChange={(e) => setSearchQueries(e.target.value)}
                 />
               </div>
@@ -148,7 +148,7 @@ const TabelSuratMasuk = (props) => (
                   color="blue-gray"
                   className="font-semibold"
                 >
-                  {index+1}
+                  {index+1}.
                 </Typography>
               </div>
             </div>
@@ -279,7 +279,7 @@ const TabelSuratKeluar = (props) => (
                   color="blue-gray"
                   className="font-semibold"
                 >
-                  {index+1}
+                  {index+1}.
                 </Typography>
               </div>
             </div>
