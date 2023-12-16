@@ -156,13 +156,15 @@ const TabelSuratMasuk = (props) => (
           <td className="border-b border-blue-gray-50">
             <div className="text-center">
               <div>
-                <Typography
-                  variant="small"
-                  color="blue-gray"
-                  className="font-semibold"
-                >
-                  {dataSurat.kodeSurat}
-                </Typography>
+                <Link to={`/dashboard/surat/masuk/detail/${dataSurat.uuid}`}>
+                  <Typography
+                    variant="small"
+                    color="blue-gray"
+                    className="font-semibold transition-colors hover:text-blue-900"
+                  >
+                    {dataSurat.kodeSurat}
+                  </Typography>
+                </Link>
               </div>
             </div>
           </td>
@@ -287,13 +289,15 @@ const TabelSuratKeluar = (props) => (
           <td className="border-b border-blue-gray-50">
             <div className="text-center">
               <div>
-                <Typography
-                  variant="small"
-                  color="blue-gray"
-                  className="font-semibold"
-                >
-                  {dataSurat.kodeSurat}
-                </Typography>
+                <Link to={`/dashboard/surat/keluar/detail/${dataSurat.uuid}`}>
+                  <Typography
+                    variant="small"
+                    color="blue-gray"
+                    className="font-semibold transition-colors hover:text-blue-900"
+                  >
+                    {dataSurat.kodeSurat}
+                  </Typography>
+                </Link>
               </div>
             </div>
           </td>

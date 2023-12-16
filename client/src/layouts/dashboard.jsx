@@ -8,7 +8,7 @@ import {
   Footer,
 } from "@/widgets/layout";
 import routes from "@/routes"; // Main Page
-import { FormTambah } from "@/components/surat-form-add";
+import { FormTambah, DetailSuratMasuk, DetailSuratKeluar } from "@/components" // Konten
 import { useMaterialTailwindController, setOpenConfigurator } from "@/context";
 
 export function Dashboard() {
@@ -44,6 +44,8 @@ export function Dashboard() {
               ))
           )}
            <Route exact path="/surat/tambah" element={<FormTambah />} />
+           <Route path="/surat/masuk/detail/:id" element={<DetailSuratMasuk />} />
+           <Route path="/surat/keluar/detail/:id" element={<DetailSuratKeluar />} />
         </Routes>
         <div className="text-blue-gray-600">
           <Footer />
