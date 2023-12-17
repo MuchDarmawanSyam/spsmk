@@ -6,11 +6,8 @@ import {
     Alert,
     IconButton
   } from "@material-tailwind/react";
-  import {
-    PencilSquareIcon,
-    TrashIcon,
-    ListBulletIcon
-  } from "@heroicons/react/24/solid";
+  import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+  import { faList, faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
   import { useState, useEffect } from "react";
   import { Link, useParams } from "react-router-dom";
   import LoadingData from "@/widgets/layout/loading-data";
@@ -32,7 +29,6 @@ import {
     const [tglDiterima, setTglDiterima] = useState("");
     const [ditambahkanOleh, setDitambahkanOleh] = useState("");
 
-    // Set jenis form yg muncul berdasarkan asal aksesnya. Kembali jika akses form bukan dari dashboard/surat
     useEffect(() => {
         setLoading(true);
         const getProductById = async() => {
@@ -72,14 +68,14 @@ import {
                     }}
                   >
                     <IconButton ripple={true} className="rounded-full text-blue-800" color="white" >
-                      <ListBulletIcon className="w-10 h-10"/>
+                      <FontAwesomeIcon icon={faList} className="w-6 h-6"/>
                     </IconButton>
                   </Link>
                 </div>
                 <div className="md:mr-4 md:w-56"> 
                   <IconButton ripple={true} className="rounded-full text-yellow-800" color="white" 
                     >
-                    <PencilSquareIcon className="w-10 h-10"/>
+                      <FontAwesomeIcon icon={faPenToSquare} className="w-6 h-6" />
                   </IconButton>
                 </div>
                 <div className="md:mr-4 md:w-56">
@@ -89,7 +85,7 @@ import {
                     }}
                   >
                     <IconButton ripple={true} className="rounded-full text-red-800" color="white" >
-                      <TrashIcon className="w-10 h-10"/>
+                      <FontAwesomeIcon icon={faTrashCan} className="w-6 h-6" />
                     </IconButton>
                   </Link>
                 </div>
