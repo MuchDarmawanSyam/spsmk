@@ -85,6 +85,20 @@ export const updateUsers = async(req, res) => {
     }
 }
 
+// Untuk Validasi ulang password saat mau tambah user
+export const validateMe = async(req, res) => {
+    const user = await Users.findOne({
+        where: {
+            email: req.body.email
+        }
+    });
+
+    if(!user) return res.status(404).json({msg: "User tidak ditemukan."});
+    const match = await argon2.verify(user.password, req.body.cPasswordSaya);
+    if(!match) return res.status(400).json({msg: "Password salah."});
+    res.status(200).json({status: "valid"});
+}
+
 export const resetPassUser = async(req, res) => {
     const user = await Users.findOne({
         where: {

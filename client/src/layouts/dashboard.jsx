@@ -13,7 +13,9 @@ import {
   FormEditSuratMasuk,
   FormEditSuratKeluar,
   DetailSuratMasuk, 
-  DetailSuratKeluar
+  DetailSuratKeluar,
+  FormTambahUser,
+  FormEditUser
 } from "@/components" // Konten
 import { useMaterialTailwindController, setOpenConfigurator } from "@/context";
 
@@ -54,6 +56,9 @@ export function Dashboard() {
            <Route path="/surat/masuk/detail/:id" element={<DetailSuratMasuk />} />
            <Route path="/surat/keluar/detail/:id" element={<DetailSuratKeluar />} />
            <Route path="/surat/keluar/edit/:id" element={<FormEditSuratKeluar />} />
+
+           <Route exact path="/user/tambah" element={<FormTambahUser />} />
+           <Route exact path="/user/edit/:id" element={<FormEditUser />} />
         </Routes>
         <div className="text-blue-gray-600">
           <Footer />

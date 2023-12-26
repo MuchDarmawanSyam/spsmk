@@ -35,7 +35,7 @@ import {
   
     useEffect(() => {
       setLoading(true);
-      const getProductById = async() => {
+      const getSuratById = async() => {
           try {
               const response = await axios.get(`http://localhost:5000/surat/keluar/${id}`);
               setNomorSurat(response.data.kodeSurat);
@@ -52,7 +52,7 @@ import {
               }
           }
       }
-      getProductById();
+      getSuratById();
       setLoading(false);
     }, [id]);
 
@@ -68,7 +68,7 @@ import {
         });
         setLoading(false);
         navigate("/dashboard/surat", {
-          state: { jenisSurat: "masuk", }
+          state: { jenisSurat: "keluar", }
         });
       } catch (error) {
         setLoading(false);

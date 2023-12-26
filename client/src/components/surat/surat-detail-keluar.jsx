@@ -4,12 +4,17 @@ import {
     CardBody,
     Typography,
     Alert,
-    IconButton
+    IconButton,
+    Dialog,
+    DialogHeader,
+    DialogBody,
+    DialogFooter,
+    Button,
   } from "@material-tailwind/react";
   import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
   import { faList, faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
   import { useState, useEffect } from "react";
-  import { Link, useParams } from "react-router-dom";
+  import { Link, useParams, useNavigate } from "react-router-dom";
   import LoadingData from "@/widgets/layout/loading-data";
   import axios from "axios";
   
@@ -18,6 +23,9 @@ import {
     const [loading, setLoading] = useState(false);
     const [alertMsg, setAlertMsg] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
+    const [openModal, setOpenModal] = useState(false);
+    const [detailModal, setDetailModal] = useState([]); // simpan nomor surat
+    const navigate = useNavigate();
     const { id } = useParams();
 
     // Data Surat Keluar
@@ -52,6 +60,21 @@ import {
         setLoading(false);
     }, [id]);
 
+    const handlerModal = (e) => {
+      setOpenModal(!openModal);
+      setDetailModal([e[0]]);
+    }
+  
+    const deleteSurat = async() => {
+      setLoading(true);
+      setOpenModal(!openModal);
+      await axios.delete(`http://localhost:5000/surat/keluar/${id}`);
+      setLoading(false);
+      navigate("/dashboard/surat", {
+        state: { jenisSurat: "keluar", }
+      });
+    }
+
     return (
       <div className="mt-12 mb-8 flex flex-col gap-12">
         <Card>
@@ -72,22 +95,19 @@ import {
                     </IconButton>
                   </Link>
                 </div>
-                <div className="md:mr-4 md:w-56"> 
-                  <IconButton ripple={true} className="rounded-full text-yellow-800" color="white" 
-                    >
-                      <FontAwesomeIcon icon={faPenToSquare} className="w-6 h-6" />
-                  </IconButton>
-                </div>
                 <div className="md:mr-4 md:w-56">
-                  <Link to="/dashboard/surat"
-                    state={{
-                      jenisSurat: "masuk"
-                    }}
-                  >
-                    <IconButton ripple={true} className="rounded-full text-red-800" color="white" >
-                      <FontAwesomeIcon icon={faTrashCan} className="w-6 h-6" />
+                  <Link to={`/dashboard/surat/keluar/edit/${id}`}>
+                    <IconButton ripple={true} className="rounded-full text-yellow-800" color="white">
+                      <FontAwesomeIcon icon={faPenToSquare} className="w-6 h-6" />
                     </IconButton>
                   </Link>
+                </div>
+                <div className="md:mr-4 md:w-56">
+                    <IconButton ripple={true} className="rounded-full text-red-800" color="white" 
+                      onClick={() => handlerModal([nomorSurat])}
+                    >
+                      <FontAwesomeIcon icon={faTrashCan} className="w-6 h-6" />
+                    </IconButton>
                 </div>
               </div>
             </div>
@@ -157,6 +177,32 @@ import {
             </div>)}
           </CardBody>
         </Card>
+        {/* Dialog Modal Konfirm Delete Surat */}
+        <Dialog 
+          open={openModal}
+          handler={handlerModal}
+          size="md"
+        >
+          <DialogHeader> Konfirmasi Hapus Data Surat Keluar. </DialogHeader>
+          <DialogBody>
+            <Typography>
+              Tindakan ini akan menghapus semua data lampiran yang berkaitan dengan surat ini.
+              (Nomor Surat: <b>{detailModal[0]}</b>). Anda Yakin ?
+            </Typography>
+          </DialogBody>
+          <DialogFooter>
+            <Button
+              variant="text"
+              onClick={handlerModal}
+              className="mr-1"
+            >
+              <span>Cancel</span>
+            </Button>
+            <Button variant="gradient" color="red" onClick={() => deleteSurat(detailModal[1])}>
+              <span>Delete</span>
+            </Button>
+          </DialogFooter>
+        </Dialog>
       </div>
     );
   }

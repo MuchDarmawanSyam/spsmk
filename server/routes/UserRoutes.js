@@ -5,6 +5,7 @@ import {
     getUsersById,
     updateUsers,
     resetPassUser,
+    validateMe,
     deleteUser
 } from "../controllers/UserController.js";
 import { adminOnly, verify } from "../middleware/UserMiddleware.js";
@@ -13,6 +14,7 @@ const router = express.Router();
 
 router.post('/users', verify, adminOnly, createUser);
 router.get('/users', verify, adminOnly, getUsers);
+router.post('/users/validate', verify, adminOnly, validateMe);
 router.get('/users/:id', verify, adminOnly, getUsersById);
 router.patch('/users/:id', verify, adminOnly, updateUsers);
 router.patch('/users/reset/:id', verify, adminOnly, resetPassUser);

@@ -2,218 +2,209 @@ import {
   Card,
   CardBody,
   CardHeader,
-  CardFooter,
   Avatar,
-  Typography,
-  Tabs,
-  TabsHeader,
-  Tab,
-  Switch,
-  Tooltip,
+  Input,
   Button,
+  IconButton,
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+  Typography,
 } from "@material-tailwind/react";
 import {
-  HomeIcon,
-  ChatBubbleLeftEllipsisIcon,
-  Cog6ToothIcon,
-  PencilIcon,
+  PlusCircleIcon
 } from "@heroicons/react/24/solid";
 import { Link } from "react-router-dom";
-import { ProfileInfoCard, MessageCard } from "@/widgets/cards";
-import { platformSettingsData, conversationsData, projectsData } from "@/data";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { useState, useEffect } from "react";
+import LoadingData from "@/widgets/layout/loading-data";
+import axios from "axios";
+
 
 export function User() {
+  const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState([]);
+  const [searchQueries, setSearchQueries] = useState("");
+  const [searchParams] = useState(["nama", "email", "role"]);
+  const [openModal, setOpenModal] = useState(false);
+  const [detailModal, setDetailModal] = useState([]); // [nama, email, role, uuid]
+
+  useEffect(() => {
+    getUser();
+  }, [searchQueries]);
+
+  const getUser = async() => {
+    setLoading(true);
+    const response = await axios.get("http://localhost:5000/users");
+    setUser(search(response.data));
+    setLoading(false);
+  }
+
+  const search = (items) => {
+    return items.filter((item) => {
+        return searchParams.some((newItem) => {
+            return (
+                item[newItem]
+                    .toString()
+                    .toLowerCase()
+                    .indexOf(searchQueries.toLowerCase()) > -1
+            );
+        });
+    });
+  }
+
+  const handlerModal = (e) => {
+    setOpenModal(!openModal);
+    setDetailModal([e[0], e[1], e[2], e[3]]);
+  }
+
+  const deleteUser = async(id) => {
+    setLoading(true);
+    setOpenModal(!openModal);
+    await axios.delete(`http://localhost:5000/users/${id}`);
+    getUser();
+    setLoading(false);
+  }
+
   return (
     <>
-      <div className="relative mt-8 h-72 w-full overflow-hidden rounded-xl bg-[url('/img/background-image.png')] bg-cover	bg-center">
-        <div className="absolute inset-0 h-full w-full bg-gray-900/75" />
-      </div>
-      <Card className="mx-3 -mt-16 mb-6 lg:mx-4 border border-blue-gray-100">
-        <CardBody className="p-4">
-          <div className="mb-10 flex items-center justify-between flex-wrap gap-6">
-            <div className="flex items-center gap-6">
-              <Avatar
-                src="/img/bruce-mars.jpeg"
-                alt="bruce-mars"
-                size="xl"
-                variant="rounded"
-                className="rounded-lg shadow-lg shadow-blue-gray-500/40"
-              />
-              <div>
-                <Typography variant="h5" color="blue-gray" className="mb-1">
-                  Richard Davis
-                </Typography>
-                <Typography
-                  variant="small"
-                  className="font-normal text-blue-gray-600"
-                >
-                  CEO / Co-Founder
-                </Typography>
-              </div>
-            </div>
-            <div className="w-96">
-              <Tabs value="app">
-                <TabsHeader>
-                  <Tab value="app">
-                    <HomeIcon className="-mt-1 mr-2 inline-block h-5 w-5" />
-                    App
-                  </Tab>
-                  <Tab value="message">
-                    <ChatBubbleLeftEllipsisIcon className="-mt-0.5 mr-2 inline-block h-5 w-5" />
-                    Message
-                  </Tab>
-                  <Tab value="settings">
-                    <Cog6ToothIcon className="-mt-1 mr-2 inline-block h-5 w-5" />
-                    Settings
-                  </Tab>
-                </TabsHeader>
-              </Tabs>
-            </div>
-          </div>
-          <div className="gird-cols-1 mb-12 grid gap-12 px-4 lg:grid-cols-2 xl:grid-cols-3">
-            <div>
-              <Typography variant="h6" color="blue-gray" className="mb-3">
-                Platform Settings
+      <div className="mt-12 mb-8 flex flex-col gap-12">  
+        <Card>
+          <CardHeader variant="gradient" color="gray" className="mb-8 p-6">
+            <div className="flex">
+              <Typography variant="h6" color="white" className="w-2/3 mt-2">
+                    Lihat Data Pengguna
               </Typography>
-              <div className="flex flex-col gap-12">
-                {platformSettingsData.map(({ title, options }) => (
-                  <div key={title}>
-                    <Typography className="mb-4 block text-xs font-semibold uppercase text-blue-gray-500">
-                      {title}
-                    </Typography>
-                    <div className="flex flex-col gap-6">
-                      {options.map(({ checked, label }) => (
-                        <Switch
-                          key={label}
-                          id={label}
-                          label={label}
-                          defaultChecked={checked}
-                          labelProps={{
-                            className: "text-sm font-normal text-blue-gray-500",
-                          }}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <ProfileInfoCard
-              title="Profile Information"
-              description="Hi, I'm Alec Thompson, Decisions: If you can't decide, the answer is no. If two equally difficult paths, choose the one more painful in the short term (pain avoidance is creating an illusion of equality)."
-              details={{
-                "first name": "Alec M. Thompson",
-                mobile: "(44) 123 1234 123",
-                email: "alecthompson@mail.com",
-                location: "USA",
-                social: (
-                  <div className="flex items-center gap-4">
-                    <i className="fa-brands fa-facebook text-blue-700" />
-                    <i className="fa-brands fa-twitter text-blue-400" />
-                    <i className="fa-brands fa-instagram text-purple-500" />
-                  </div>
-                ),
-              }}
-              action={
-                <Tooltip content="Edit Profile">
-                  <PencilIcon className="h-4 w-4 cursor-pointer text-blue-gray-500" />
-                </Tooltip>
-              }
-            />
-            <div>
-              <Typography variant="h6" color="blue-gray" className="mb-3">
-                Platform Settings
-              </Typography>
-              <ul className="flex flex-col gap-6">
-                {conversationsData.map((props) => (
-                  <MessageCard
-                    key={props.name}
-                    {...props}
-                    action={
-                      <Button variant="text" size="sm">
-                        reply
-                      </Button>
-                    }
+              <div className="w-1/3 flex justify-end">
+                <div className="mr-auto md:mr-4 md:w-56 ml-10">
+                  <Input label={"Pencarian Surat Pengguna"} color="white" 
+                    onChange={(e) => setSearchQueries(e.target.value)}
                   />
-                ))}
-              </ul>
+                </div>
+                <div className="mr-auto md:mr-4 md:w-56">
+                  <Link to="/dashboard/user/tambah">
+                    <IconButton ripple={true} className="rounded-full text-green-800" color="white" >
+                      <PlusCircleIcon className="w-10 h-10"/>
+                    </IconButton>
+                  </Link>
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="px-4 pb-4">
-            <Typography variant="h6" color="blue-gray" className="mb-2">
-              Projects
-            </Typography>
-            <Typography
-              variant="small"
-              className="font-normal text-blue-gray-500"
-            >
-              Architects design houses
-            </Typography>
-            <div className="mt-6 grid grid-cols-1 gap-12 md:grid-cols-2 xl:grid-cols-4">
-              {projectsData.map(
-                ({ img, title, description, tag, route, members }) => (
-                  <Card key={title} color="transparent" shadow={false}>
-                    <CardHeader
-                      floated={false}
-                      color="gray"
-                      className="mx-0 mt-0 mb-4 h-64 xl:h-40"
+          </CardHeader>
+          <CardBody className="overflow-x-scroll px-0 pt-0 pb-2">
+            <table className="w-full min-w-[640px] table-auto">
+              <thead>
+                <tr>
+                  {["No", "Nama & Email", "Role", "Aksi"].map((el) => (
+                    <th
+                      key={el}
+                      className="border-b border-blue-gray-50 py-3 px-5 text-left"
                     >
-                      <img
-                        src={img}
-                        alt={title}
-                        className="h-full w-full object-cover"
-                      />
-                    </CardHeader>
-                    <CardBody className="py-0 px-1">
                       <Typography
                         variant="small"
-                        className="font-normal text-blue-gray-500"
+                        className="text-[11px] font-bold uppercase text-blue-gray-400"
                       >
-                        {tag}
+                        {el}
                       </Typography>
-                      <Typography
-                        variant="h5"
-                        color="blue-gray"
-                        className="mt-1 mb-2"
-                      >
-                        {title}
-                      </Typography>
-                      <Typography
-                        variant="small"
-                        className="font-normal text-blue-gray-500"
-                      >
-                        {description}
-                      </Typography>
-                    </CardBody>
-                    <CardFooter className="mt-6 flex items-center justify-between py-0 px-1">
-                      <Link to={route}>
-                        <Button variant="outlined" size="sm">
-                          view project
-                        </Button>
-                      </Link>
-                      <div>
-                        {members.map(({ img, name }, key) => (
-                          <Tooltip key={name} content={name}>
-                            <Avatar
-                              src={img}
-                              alt={name}
-                              size="xs"
-                              variant="circular"
-                              className={`cursor-pointer border-2 border-white ${
-                                key === 0 ? "" : "-ml-2.5"
-                              }`}
-                            />
-                          </Tooltip>
-                        ))}
-                      </div>
-                    </CardFooter>
-                  </Card>
-                )
-              )}
-            </div>
-          </div>
-        </CardBody>
-      </Card>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                
+                {loading ? <LoadingData /> : (user.map(
+                  ({ uuid, nama, email, role, fotoprofil, url }, key) => {
+                    const className = `py-3 px-5 ${
+                      key === user.length - 1
+                        ? ""
+                        : "border-b border-blue-gray-50"
+                    }`;
+
+                    return (
+                      <tr key={uuid}>
+                        <td className={className}>
+                          <Typography className="text-xs font-semibold text-blue-gray-600">
+                            {key+1}.
+                          </Typography>
+                        </td>
+                        <td className={className}>
+                          <div className="flex items-center gap-4">
+                            <Avatar src={url} alt={fotoprofil} size="sm" variant="rounded" />
+                            <div>
+                              <Typography
+                                variant="small"
+                                color="blue-gray"
+                                className="font-semibold"
+                              >
+                                {nama}
+                              </Typography>
+                              <Typography className="text-xs font-normal text-blue-gray-500">
+                                {email}
+                              </Typography>
+                            </div>
+                          </div>
+                        </td>
+                        <td className={className}>
+                          <Typography className="text-xs font-semibold text-blue-gray-600">
+                            {role}
+                          </Typography>
+                        </td>
+                        <td className={className}>
+                            <div className="flex">
+                              <Link to={`/dashboard/user/edit/${uuid}`}>
+                                <IconButton ripple={true} className="text-black ml-1" color="amber" >
+                                  <FontAwesomeIcon icon={faPenToSquare} />
+                                </IconButton>
+                              </Link>
+                              <IconButton ripple={true} className="text-white ml-2 mr-1" color="red" 
+                                onClick={() => handlerModal([nama, email, role, uuid])}
+                              >
+                                <FontAwesomeIcon icon={faTrashCan} />
+                              </IconButton>
+                          </div>
+                        </td>
+                      </tr>
+                    )
+                  }
+                ))}
+              </tbody>
+            </table>
+          </CardBody>
+        </Card>
+        { /* Lanjut bikin fungsi add user, update user dan reset password user */}
+        {/* Dialog Modal Konfirm Delete Surat */}
+        <Dialog 
+          open={openModal}
+          handler={handlerModal}
+          size="md"
+        >
+          <DialogHeader> Konfirmasi Hapus Data Pengguna. </DialogHeader>
+          <DialogBody>
+            <Typography>
+              Tindakan ini akan menghapus semua data dengan rincian:<br></br>
+              <b>
+                Nama Pengguna  : {detailModal[0]}. <br></br>
+                Email Pengguna : {detailModal[1]}. <br></br>
+                Role Pengguna  : {detailModal[2]}.
+              </b>
+            </Typography>
+          </DialogBody>
+          <DialogFooter>
+            <Button
+              variant="text"
+              onClick={handlerModal}
+              className="mr-1"
+            >
+              <span>Cancel</span>
+            </Button>
+            <Button variant="gradient" color="red" onClick={() => deleteUser(detailModal[3])}>
+              <span>Delete</span>
+            </Button>
+          </DialogFooter>
+        </Dialog>
+      </div>
     </>
   );
 }
